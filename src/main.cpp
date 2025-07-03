@@ -3,7 +3,7 @@
 #include <fstream>
 #include <string>
 
-#include "init.hpp"
+#include "include/init.hpp"
 
 int main(int argc, char *argv[])
 {

@@ -1,4 +1,4 @@
-#include "init.hpp"
+#include "include/init.hpp"
 #include <iostream>
 #include <filesystem>
 #include <fstream>
@@ -17,7 +17,7 @@ int git_init() {
             std::cerr << "Failed to create .git/HEAD file.\n";
             return EXIT_FAILURE;
         }
-        
+
         std::cout<< "Initialized git directory\n";
     } catch (const std::filesystem::filesystem_error& e) {
         std::cerr << e.what() << '\n';
