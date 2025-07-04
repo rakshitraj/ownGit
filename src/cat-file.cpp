@@ -61,6 +61,8 @@ int cat_file(const int argc, const char *const argv[]) {
     const std::string file_name = value.substr(2);
     std::string path = ".git/objects/" + dir_name + '/' + file_name;
 
-    const auto object_content = deserialize(path); 
+    const auto object_content = deserialize(path);
+    std::cout<< object_content << std::flush;
+
     return EXIT_SUCCESS;
 }
