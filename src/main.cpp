@@ -4,6 +4,7 @@
 #include <string>
 
 #include "include/init.hpp"
+#include "include/cat-file.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +24,8 @@ int main(int argc, char *argv[])
     
     if (command == "init") {
         return git_init();
+    } else if (command == "cat-file") {
+        return cat_file(argc, argv);
     } else {
         std::cerr << "Unknown command " << command << '\n';
         return EXIT_FAILURE;
