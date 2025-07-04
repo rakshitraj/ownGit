@@ -5,19 +5,11 @@
 #include <fstream>
 #include <zlib.h>
 
-#define BUF 20 // Will create a buffer of 2^BUF bytes
-#define CHUNK_SIZE 10
-
-static const std::size_t default_buff_size = static_cast<std::size_t>(1 << BUF);
-
 std::string decompress_zlib(const std::vector<char>& compressed) {
-    // std::vector<char> out(default_buff_size);
 
     z_stream strm = {};
     strm.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(compressed.data()));
     strm.avail_in = compressed.size();
-    // strm.next_out = reinterpret_cast<Bytef*>(out.data());
-    // strm.avail_out = out.size();
 
     if (inflateInit(&strm) != Z_OK) {
         throw std::runtime_error("inflateInit failed");
@@ -27,7 +19,6 @@ std::string decompress_zlib(const std::vector<char>& compressed) {
     int ret;
     int count = 1;
     do {
-        std::cout<<"Processed " << count++ * CHUNK_SIZE << " bytes...\n";
         strm.next_out = reinterpret_cast<Bytef*>(buffer);
         strm.avail_out = CHUNK_SIZE; // bytes available to write to 
         ret = inflate(&strm, Z_SYNC_FLUSH);
@@ -40,7 +31,6 @@ std::string decompress_zlib(const std::vector<char>& compressed) {
         throw std::runtime_error("inflateEnd failed");
     }
 
-    std::cout << "Processed " << strm.total_out << " bytes.";
     return std::string(out.data(), strm.total_out);
 }
 
