@@ -61,8 +61,19 @@ int cat_file(const int argc, const char *const argv[]) {
     const std::string file_name = value.substr(2);
     std::string path = ".git/objects/" + dir_name + '/' + file_name;
 
-    const auto object_content = deserialize(path);
-    std::cout<< object_content << std::flush;
+    const std::string object_content = deserialize(path);
 
+    // Read object type
+    int space_pos = object_content.find(' ');
+    std::string type = object_content.substr(0, space_pos);
+
+    // Read object size
+    int null_pos = object_content.find('\0');
+    std::string size = object_content.substr(space_pos+1,null_pos-space_pos-1);
+
+    // Read content
+    std::string content = object_content.substr(null_pos+1);
+
+    std::cout<< content << std::flush;
     return EXIT_SUCCESS;
 }
