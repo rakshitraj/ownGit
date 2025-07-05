@@ -23,7 +23,7 @@ std::string sha1_hash(const std::vector<char>& hashable_data) {
 }
 
 int compress_zlib(std::vector<char>& uncompressed_data, std::vector<char>& out) {
-    z_stream strm;
+    z_stream strm = {};
     strm.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(uncompressed_data.data()));
     strm.avail_in = uncompressed_data.size();
 
