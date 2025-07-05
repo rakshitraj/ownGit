@@ -44,7 +44,7 @@ void compress_zlib(std::vector<char>& uncompressed_data, std::vector<char>& out)
             throw std::runtime_error("deflate failed in compress_zlib");
         }
         out.insert(out.end(), buffer, buffer + (CHUNK_SIZE - strm.avail_out));
-    } while (ret != Z_STREAM_END);
+    } while (strm.avail_out == 0);
     // End deflate
     if (deflateEnd(&strm) != Z_OK) {
         std::cout << "err3\n";
