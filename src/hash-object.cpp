@@ -38,7 +38,7 @@ void compress_zlib(std::vector<char>& uncompressed_data, std::vector<char>& out)
     do {
         strm.next_out = reinterpret_cast<Bytef*>(buffer);
         strm.avail_out = CHUNK_SIZE;
-        ret = deflate(&strm, Z_SYNC_FLUSH);
+        ret = deflate(&strm, Z_FINISH);
         if (ret == Z_STREAM_ERROR) {
             std::cout << "err2\n";
             throw std::runtime_error("deflate failed in compress_zlib");
