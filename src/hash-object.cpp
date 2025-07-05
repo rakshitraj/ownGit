@@ -86,12 +86,15 @@ int hash_object(const int argc, const char* const argv[]) {
     std::string header = type + " " + std::to_string(file_contents.size()) + '\0';
     file_contents.insert(file_contents.begin(), header.begin(), header.end());
 
-    std::cout << "hashing...";
+    std::cout << "hashing...\n";
     std::string hash = sha1_hash(file_contents);
+    std::cout << "hash --> " << hash << '\n';
 
-    std::cout << "serailizing...";
+    std::cout << "serailizing...\n";
     std::string out = serialize(file_contents);
+    std::cout << "out --> " << out << '\n';
 
+    std::cout << "Writing object...\n";
     if (flag == "-w") {
         std::string object_dir = hash.substr(0,2);
         std::string object_name = hash.substr(2);
