@@ -19,7 +19,6 @@ std::string sha1_hash(const std::vector<char>& hashable_data) {
         oss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
     }
     return oss.str();
-
 }
 
 int compress_zlib(std::vector<char>& uncompressed_data, std::vector<char>& out) {
