@@ -29,6 +29,7 @@ int compress_zlib(std::vector<char>& uncompressed_data, std::vector<char>& out) 
 
     // Init Deflate
     if (deflateInit(&strm, Z_BEST_SPEED) != Z_OK) {
+        std::cout << "err1\n";
         throw std::runtime_error("deflateInit failed");
     }
     // Deflate uncompressed data
@@ -39,11 +40,13 @@ int compress_zlib(std::vector<char>& uncompressed_data, std::vector<char>& out) 
         strm.avail_out = CHUNK_SIZE;
         ret = deflate(&strm, Z_SYNC_FLUSH);
         if (ret == Z_STREAM_ERROR) {
+            std::cout << "err2\n";
             throw std::runtime_error("deflate failed in compress_zlib");
         }
         out.insert(out.end(), buffer, buffer + (CHUNK_SIZE - strm.avail_out));
     } while (ret != Z_STREAM_END);
     if (deflateEnd(&strm) != Z_OK) {
+        std::cout << "err3\n";
         throw std::runtime_error("deflateEnd failed");
     }
 
@@ -54,6 +57,7 @@ std::string serialize(std::vector<char> uncompressed_data) {
     // Deflate hashable data
     std::vector<char> ret;
     int total_out = compress_zlib(uncompressed_data, ret);
+    std::cout << total_out << '\n';
     std::string out = std::string(ret.data(), total_out);
     return out;
 }
