@@ -47,7 +47,7 @@ std::string deserialize(std::string path) {
 int cat_file(const int argc, const char *const argv[]) {
     if (argc <= 3) {
         std::cerr << "Invalid arguments, Required '-p' <blob-sha>\n";
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
     }
 
     const std::string flag = argv[2];
