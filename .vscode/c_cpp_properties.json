@@ -15,7 +15,8 @@
 
             "name": "Brew",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/opt/homebrew/opt/openssl@3/include"
             ],
             "defines": [],
             "compilerPath": "/opt/homebrew/bin/g++",

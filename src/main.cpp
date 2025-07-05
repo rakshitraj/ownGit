@@ -5,16 +5,19 @@
 
 #include "include/init.hpp"
 #include "include/cat-file.hpp"
+#include "include/hash-object.hpp"
 
 enum class Command { // Use CamelCase
     Init,
     CatFile,
+    HashObject,
     Unknown
 };
 
 Command parse_command(const std::string& cmd) {
     if (cmd == "init") return Command::Init;
     if (cmd == "cat-file") return Command::CatFile;
+    if (cmd == "hash-object") return Command::HashObject;
     return Command::Unknown;
 }
 
@@ -39,6 +42,8 @@ int main(int argc, char *argv[])
             return git_init();
         case Command::CatFile:
             return cat_file(argc, argv);
+        case Command::HashObject:
+            return hash_object(argc, argv);
         case Command::Unknown:
             std::cout << "Unknown command " << command << '\n';
             return EXIT_FAILURE;
