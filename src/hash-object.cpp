@@ -6,6 +6,7 @@
 #include <zlib.h>
 #include <sstream>
 #include <iomanip>
+#include <filesystem>
 
 std::string sha1_hash(const std::vector<char>& hashable_data) {
     unsigned char hash[SHA_DIGEST_LENGTH];
@@ -21,7 +22,7 @@ std::string sha1_hash(const std::vector<char>& hashable_data) {
     return oss.str();
 }
 
-int compress_zlib(std::vector<char>& uncompressed_data, std::vector<char>& out) {
+void compress_zlib(std::vector<char>& uncompressed_data, std::vector<char>& out) {
     z_stream strm = {};
     strm.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(uncompressed_data.data()));
     strm.avail_in = uncompressed_data.size();
@@ -44,20 +45,18 @@ int compress_zlib(std::vector<char>& uncompressed_data, std::vector<char>& out) 
         }
         out.insert(out.end(), buffer, buffer + (CHUNK_SIZE - strm.avail_out));
     } while (ret != Z_STREAM_END);
+    // End deflate
     if (deflateEnd(&strm) != Z_OK) {
         std::cout << "err3\n";
         throw std::runtime_error("deflateEnd failed");
     }
-
-    return strm.total_out;
 }
 
 std::string serialize(std::vector<char> uncompressed_data) {
     // Deflate hashable data
     std::vector<char> ret;
-    int total_out = compress_zlib(uncompressed_data, ret);
-    std::cout << total_out << '\n';
-    std::string out = std::string(ret.data(), total_out);
+    compress_zlib(uncompressed_data, ret);
+    std::string out(ret.begin(), ret.end());
     return out;
 }
 
@@ -103,8 +102,12 @@ int hash_object(const int argc, const char* const argv[]) {
         std::string object_name = hash.substr(2);
         std::string object_path = ".git/objects/" + object_dir + '/' + object_name;
 
+        // Create directory
+        std::filesystem::create_directory(".git/objects/" + object_dir);
+
+        // Create object file
         std::ofstream git_object;
-        git_object.open(object_path);
+        git_object.open(object_path, std::ios::binary);
         if (!git_object.is_open()) {
             std::string error_msg = "failed to write git object at " + object_path;
             throw std::runtime_error(error_msg);
