@@ -21,12 +21,12 @@ std::string decompress_zlib(const std::vector<char>& compressed) {
     do {
         strm.next_out = reinterpret_cast<Bytef*>(buffer);
         strm.avail_out = CHUNK_SIZE; // bytes available to write to 
-        ret = inflate(&strm, Z_SYNC_FLUSH);
+        ret = inflate(&strm, Z_FINISH);
         if (ret == Z_STREAM_ERROR) {
             throw std::runtime_error("inflate failed in decompress_zlib");
         }
         out.insert(out.end(), buffer, buffer + (CHUNK_SIZE - strm.avail_out));
-    } while (ret != Z_STREAM_END);
+    } while (strm.avail_out == 0);
     if (inflateEnd(&strm) != Z_OK) {
         throw std::runtime_error("inflateEnd failed");
     }
