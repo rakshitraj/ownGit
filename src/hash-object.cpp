@@ -49,7 +49,7 @@ void compress_zlib(std::vector<char>& uncompressed_data, std::vector<char>& out)
     }
 }
 
-std::string serialize(std::vector<char> uncompressed_data) {
+std::string serialize(std::vector<char>& uncompressed_data) {
     // Deflate hashable data
     std::vector<char> ret;
     compress_zlib(uncompressed_data, ret);
